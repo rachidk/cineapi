@@ -3,11 +3,20 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use App\Repository\TypeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource()]
+#[Get()]
+#[GetCollection()]
+#[Post(security: "is_granted('ROLE_USER')")]
+#[Put(security: "is_granted('ROLE_USER')")]
+#[Patch(security: "is_granted('ROLE_USER')")]
 #[ORM\Entity(repositoryClass: TypeRepository::class)]
 class Type
 {

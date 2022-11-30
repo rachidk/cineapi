@@ -9,6 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ApiResource()]
+#[Get()]
+#[GetCollection()]
+#[Post(security: "is_granted('ROLE_USER')")]
+#[Put(security: "is_granted('ROLE_USER')")]
+#[Patch(security: "is_granted('ROLE_USER')")]
 #[ORM\Entity(repositoryClass: PeopleRepository::class)]
 class People
 {
