@@ -11,6 +11,8 @@ use ApiPlatform\Metadata\Post;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Service\ClientApi;
+
 
 #[ApiResource(
     normalizationContext: ['groups' => ['read:collection:movie']]
@@ -44,10 +46,18 @@ class Movie
     #[ORM\OneToMany(targetEntity:MoviePeople::class, mappedBy:'movie')]
     private $moviePeoples;
 
-    public function __construct()
+
+    #[ORM\Column]
+    private ?string $poster = null; 
+
+    private $clientApi;
+
+
+    public function __construct(ClientApi $clientApi)
     {
         $this->movieTypes = new ArrayCollection();
         $this->moviePeoples = new ArrayCollection();
+        $this->clientApi = $clientApi;
     }
 
     public function getId(): ?int
@@ -120,4 +130,24 @@ class Movie
     {
         return $this->moviePeoples;
     }
+
+
+    public function setPoster(string $poster)
+    {
+        $this->poster = $poster;
+    }
+
+
+    public function getPoster()
+    {
+        if(empty($this->poster))
+        {
+            $this->poster = $this->clientApi->getPosterFromMovie($this);
+        }
+
+        dd($this->poster);
+        return $this->poster;
+    }
+
+
 }
